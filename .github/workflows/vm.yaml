@@ -22,7 +22,7 @@ jobs:
     - name: Create VM
       run: |
         az vm create \
-            --resource-group demo-x \
+            --resource-group MyResourceGroup \
             --name myVM \
             --image Win2019Datacenter \
             --admin-username azureuser \
