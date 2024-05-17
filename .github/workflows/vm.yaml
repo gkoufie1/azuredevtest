@@ -1,0 +1,34 @@
+name: Deploy VM
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  create-vm:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDS }}
+
+    - name: Create VM
+      run: |
+        az vm create \
+            --resource-group MyResourceGroup \
+            --name myVM \
+            --image Win2019Datacenter \
+            --admin-username azureuser \
+            --admin-password ${{ secrets.ADMIN_PASSWORD }} \
+            --size Standard_D2s_v3 \
+            --nsg-rule RDP
+
+    - name: Logout of Azure
+      run: az logout
